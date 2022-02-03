@@ -1,6 +1,7 @@
 #!/bin/sh
 set -eu
 
-fossa_cli_command="${1:-}"
+# Execute analyze by default
+fossa_cli_command="${1:-analyze}"
 
 fossa "${fossa_cli_command}"
