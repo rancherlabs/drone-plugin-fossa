@@ -17,3 +17,9 @@ steps:
     api_key:
       from_secret: FOSSA_API_KEY
 ```
+
+By default, this plugin will run the analyze command per the generic CI documentation for FOSSA.
+
+## Reference
+
+- [FOSSA Documentation: Integrating FOSSA with a generic CI](https://docs.fossa.com/docs/generic-ci)
