@@ -8,6 +8,8 @@ Drone plugin for FOSSA.
 
 The following snippet should be applied to the `.drone.yml` file:
 
+#### NOTE: This will run `fossa analyze` on every drone-pr AND drone-publish run
+
 ```
 kind: pipeline
 name: fossa
@@ -15,6 +17,7 @@ name: fossa
 steps:
 - name: fossa  
   image: rancher/drone-fossa:latest
+  failure: ignore
   settings:
     api_key:
       from_secret: FOSSA_API_KEY
@@ -24,7 +27,48 @@ By default, this plugin will run the `analyze` command per the generic CI docume
 
 ### Advanced
 
-#### Command
+#### Run Both `fossa analyze` and `fossa test` in the same Drone Pipeline and only drone-publish
+
+```yaml
+  - name: fossa-analyze
+    image: rancher/drone-fossa:latest
+    failure: ignore
+    settings:
+      api_key:
+        from_secret: FOSSA_API_KEY
+    when:
+      instance:
+        - drone-publish.rancher.io
+      ref:
+        include:
+          - "refs/heads/*"
+          - "refs/tags/v*"
+          - "refs/pull/*"
+      event:
+        - push
+        - tag
+
+  - name: fossa-test
+    image: rancher/drone-fossa:latest
+    failure: ignore
+    settings:
+      api_key:
+        from_secret: FOSSA_API_KEY
+    commands: 
+      - test
+    when:
+      instance:
+        - drone-publish.rancher.io
+      ref:
+        include:
+          - "refs/heads/*"
+          - "refs/tags/v*"
+      event:
+        - push
+        - tag
+```        
+
+#### How to Run `fossa test`
 
 ```
 kind: pipeline
@@ -33,10 +77,12 @@ name: fossa
 steps:
 - name: fossa  
   image: rancher/drone-fossa:latest
+  failure: ignore  
   settings:
     api_key:
       from_secret: FOSSA_API_KEY
-    command: test
+    commands: 
+      - test
 ```
 
 #### Debug
