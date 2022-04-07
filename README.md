@@ -31,13 +31,31 @@ kind: pipeline
 name: fossa
 
 steps:
-- name: fossa  
+- name: fossa-test
   image: rancher/drone-fossa:latest
   settings:
     api_key:
       from_secret: FOSSA_API_KEY
     command: test
 ```
+
+#### Alternate Syntax
+
+```
+kind: pipeline
+name: fossa
+
+steps:
+- name: fossa-test
+  image: rancher/drone-fossa:latest
+  settings:
+    api_key:
+      from_secret: FOSSA_API_KEY
+    command:
+      - test
+```
+
+**Note: this syntax only accepts a single command.**
 
 #### Debug
 

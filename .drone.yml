@@ -41,6 +41,26 @@ steps:
       - push
       - tag
 
+- name: fossa-test-alt
+  image: rancher/drone-fossa:latest
+  settings:
+    api_key:
+      from_secret: FOSSA_API_KEY
+    command:
+      - test
+    debug: true
+  when:
+    instance:
+      - drone-publish.rancher.io
+    ref:
+      include:
+        - "refs/heads/*"
+        - "refs/tags/*"
+        - "refs/pull/*"
+    event:
+      - push
+      - tag
+
 ---
 kind: pipeline
 name: docker
