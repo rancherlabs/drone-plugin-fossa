@@ -10,6 +10,17 @@ steps:
     api_key:
       from_secret: FOSSA_API_KEY
     debug: true
+  when:
+    instance:
+      - drone-publish.rancher.io
+    ref:
+      include:
+        - "refs/heads/*"
+        - "refs/tags/*"
+        - "refs/pull/*"
+    event:
+      - push
+      - tag
 
 - name: fossa-test
   image: rancher/drone-fossa:latest
@@ -18,6 +29,17 @@ steps:
       from_secret: FOSSA_API_KEY
     command: test
     debug: true
+  when:
+    instance:
+      - drone-publish.rancher.io
+    ref:
+      include:
+        - "refs/heads/*"
+        - "refs/tags/*"
+        - "refs/pull/*"
+    event:
+      - push
+      - tag
 
 ---
 kind: pipeline
@@ -33,4 +55,15 @@ steps:
       from_secret: docker_password
     repo: rancher/drone-fossa
     tags: latest
+  when:
+    instance:
+      - drone-publish.rancher.io
+    ref:
+      include:
+        - "refs/heads/*"
+        - "refs/tags/*"
+        - "refs/pull/*"
+    event:
+      - push
+      - tag
 
